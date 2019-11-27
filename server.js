@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const app = require("express");
 const exphbs = require("express-handlebars");
+const db = mongoose.connection;
 
 ////////////////////
 // scrapper's
@@ -22,3 +23,11 @@ const cheerio = require("cheerio");
 ////////////////////
 
 const port = process.env.PORT || 3000
+
+app.listen(PORT, function() {
+     console.log(
+       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
+       PORT,
+       PORT
+     );
+   });
