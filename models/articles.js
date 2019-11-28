@@ -27,7 +27,7 @@ let ArticleInfo = new Schema({
           type: Boolean,
           default: false
      },
-     ntoes: [{
+     notes: [{
           type: Schema.Types.ObjectId,
           ref: "note"
      }]
