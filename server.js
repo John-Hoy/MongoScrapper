@@ -7,9 +7,18 @@ const bodyParser = require("body-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const path = require("path");
-const app = require("express");
+const app = express();
 const exphbs = require("express-handlebars");
 const db = mongoose.connection;
+
+////////////////////
+// morgan
+////////////////////
+
+app.use(logger("dev"));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 ////////////////////
 // scrapper's
@@ -22,12 +31,10 @@ const cheerio = require("cheerio");
 // port
 ////////////////////
 
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
-app.listen(PORT, function() {
+app.listen(PORT, () => {
      console.log(
-       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
-       PORT,
-       PORT
+       `==> 🌎  Listening on port. Visit http://localhost:${PORT}/ in your browser`
      );
    });
