@@ -85,7 +85,7 @@ app.get("/scrapper", (req, res) => {
                if ($(this).find("ul").length) {
                     summary = $(this).find("li").first().text();
                } else {
-                    summary $(this).find("p").text();
+                    summary = $(this).find("p").text();
                };
 
                result.title = $(this).find("h2").text();
@@ -96,7 +96,7 @@ app.get("/scrapper", (req, res) => {
 
 });
 
-app.get("/articles", (res, res) => {
+app.get("/articles", (req, res) => {
      Article.find({}, (err, data) => {
           if (err) {
                console.log(err);
@@ -106,7 +106,7 @@ app.get("/articles", (res, res) => {
      });
 });
 
-app.get("/articles:id", (res, res) => {
+app.get("/articles:id", (req, res) => {
      Article.findOne({ "_id": req.params.id })
           .populate("note")
           .exec((err, data) => {
@@ -118,7 +118,7 @@ app.get("/articles:id", (res, res) => {
           });
 });
 
-app.post("/articles/save:id", (res, res) => {
+app.post("/articles/save:id", (req, res) => {
      Article.findOneAndUpdate({ "_id": req.params.id }, {
           "saved": true
      })
@@ -131,7 +131,7 @@ app.post("/articles/save:id", (res, res) => {
           });
 });
 
-app.post("/articles/delete:id", (res, res) => {
+app.post("/articles/delete:id", (req, res) => {
      Articles.findOneAndUpdate({ "_id": req.params.id }, { "saved": false, "notes": [] })
           .exec((err, data) => {
                if (err) {

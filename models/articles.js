@@ -29,7 +29,7 @@ let ArticleInfo = new Schema({
      },
      notes: [{
           type: Schema.Types.ObjectId,
-          ref: "note"
+          ref: "Note"
      }]
 });
 
