@@ -12,6 +12,13 @@ const exphbs = require("express-handlebars");
 const db = mongoose.connection;
 
 ////////////////////
+// get article and note
+////////////////////
+
+const Article = require("./models/articles");
+const Note = require("./models/notes");
+
+////////////////////
 // morgan
 ////////////////////
 
