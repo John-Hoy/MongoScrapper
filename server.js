@@ -43,7 +43,7 @@ app.engine("handlebars", exphbs({
      partialsDir: path.join(__dirname, "/views/layouts/partials")
 }));
 app.set("view engine", "handlebars");
-
+app.use(express.static("public"));
 ////////////////////
 // mongoose
 ////////////////////
@@ -51,11 +51,11 @@ app.set("view engine", "handlebars");
 // mongoose.connect("mongodb://HEROKU DATABASE");
 mongoose.connect("mongodb://localhost/mongoscrapper");
 
-db.on("error", function (error) {
-     console.log("Mongoose Error: ", error);
+db.on("error", (error) => {
+     console.log(`Mongoose Error:${error}`);
 });
 
-db.once("open", function () {
+db.once("open", () => {
      console.log("Mongoose connection successful.");
 });
 
@@ -84,20 +84,24 @@ app.get("/saved", (req, res) => {
 
 app.get("/scrapper", (req, res) => {
      request("https://www.nytimes.com/", (err, response, html) => {
+          // console.log(response.data);
           let $ = cheerio.load(html);
-          $("artcile").each((i, element) => {
+          $("article").each((i, element) => {
                let result = {};
 
-               summary = ""
-               if ($(this).find("ul").length) {
-                    summary = $(this).find("li").first().text();
-               } else {
-                    summary = $(this).find("p").text();
-               };
+               let summary = $(element).find("ul").find("li").first().text();
+               console.log(summary)
+               // if ($(this).find("ul")) {
+               //      // console.log($(this).find("li").first())
+               //      summary = $(this).find("li").first().text();
+               // } else {
+               //      summary = $(this).find("p").text();
+               // };
 
                result.title = $(this).find("h2").text();
                result.summary = summary;
                result.link = `https://www.nytimes.com${$(this).find("a").attr("href")}`;
+               //console.log(element);
           })
      })
 
