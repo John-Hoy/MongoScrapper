@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({
 // scrapper's
 ////////////////////
 
-const request = require("request");
+const axios = require("axios");
 const cheerio = require("cheerio");
 
 ////////////////////
@@ -83,28 +83,28 @@ app.get("/saved", (req, res) => {
 });
 
 app.get("/scrapper", (req, res) => {
-     request("https://www.nytimes.com/", (err, response, html) => {
-          // console.log(response.data);
-          let $ = cheerio.load(html);
-          $("article").each((i, element) => {
-               let result = {};
+     axios.get("http://www.artnews.com/category/news/").then((response) => {
+          var $ = cheerio.load(response.data);
 
-               let summary = $(element).find("ul").find("li").first().text();
-               console.log(summary)
-               // if ($(this).find("ul")) {
-               //      // console.log($(this).find("li").first())
-               //      summary = $(this).find("li").first().text();
-               // } else {
-               //      summary = $(this).find("p").text();
-               // };
+          $("h2.entry-title").each((i, element) => {
+               var result = {};
 
-               result.title = $(this).find("h2").text();
-               result.summary = summary;
-               result.link = `https://www.nytimes.com${$(this).find("a").attr("href")}`;
-               //console.log(element);
-          })
-     })
+               result.title = $(element).text();
 
+               result.link = $(element).children("a").attr("href");
+
+               result.summary = $(element).siblings(".entry-summary").text().trim();
+
+               db.Article.create(result)
+                    .then((dbArticle) => {
+                         console.log(dbArticle);
+                    })
+                    .catch((err) => {
+                         console.log(err);
+                    });
+          });
+     });
+     res.send("Scrape Complete");
 });
 
 app.get("/articles", (req, res) => {
